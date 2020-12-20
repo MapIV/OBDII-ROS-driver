@@ -1,8 +1,8 @@
 import obd
 import time
 import rospy
-# from std_msgs.msg import Float64
-from geometry_msgs import TwistStamped
+from std_msgs.msg import Float64
+from geometry_msgs.msg import TwistStamped
 
 
 rospy.init_node('OBDII-ROS-driver', anonymous=True)
@@ -19,37 +19,47 @@ pubspeed = rospy.Publisher('can_twist', TwistStamped, queue_size=10)
 # pubfuel = rospy.Publisher('fuel', Float64, queue_size=10)
 
 
-# def new_rpm(v):
+def new_rpm(v):
+    value = v
 #     value = float(str(v).split(':')[-1].split(' ')[0])
 #     pubrpm.publish(value)
 def new_speed(v):
     velocity = TwistStamped()
     velocity.header.stamp = rospy.Time.now()
     velocity.header.frame_id = "vehicle"
+    print "new_speed "+str(v)
     velocity.twist.linear.x = float(str(v).split(':')[-1].split(' ')[0])
     pubspeed.publish(velocity)
-# def new_relthrot(v):
+def new_relthrot(v):
+    value = v
 #     value = float(str(v).split(':')[-1].split(' ')[0])
 #     pubrelthrot.publish(value)
-# def new_throt(v):
+def new_throt(v):
+    value = v
 #     value = float(str(v).split(':')[-1].split(' ')[0])
 #     pubthrottle.publish(value)
-# def new_accd(v):
+def new_accd(v):
+    value = v
 #     value = float(str(v).split(':')[-1].split(' ')[0])
 #     pubaccd.publish(value)
-# def new_acce(v):
+def new_acce(v):
+    value = v
 #     value = float(str(v).split(':')[-1].split(' ')[0])
 #     pubacce.publish(value)
-# def new_throtact(v):
+def new_throtact(v):
+    value = v
 #     value = float(str(v).split(':')[-1].split(' ')[0])
 #     pubthrotact.publish(value)
-# def new_engine(v):
+def new_engine(v):
+    value = v
 #     value = float(str(v).split(':')[-1].split(' ')[0])
 #     pubengine.publish(value)
-# def new_pressure(v):
+def new_pressure(v):
+    value = v
 #     value = float(str(v).split(':')[-1].split(' ')[0])
 #     pubpressure.publish(value)
-# def new_fuel(v):
+def new_fuel(v):
+    value = v
 #     value = float(str(v).split(':')[-1].split(' ')[0])
 #     pubfuel.publish(value)
 
@@ -60,16 +70,16 @@ if __name__ == '__main__':
 
         connection = obd.Async(portstr=port)
 
-        # connection.watch(obd.commands.RPM, callback=new_rpm)
+        connection.watch(obd.commands.RPM, callback=new_rpm)
         connection.watch(obd.commands.SPEED, callback=new_speed)
-        # connection.watch(obd.commands.THROTTLE_POS, callback=new_throt)
-        # connection.watch(obd.commands.RELATIVE_THROTTLE_POS, callback=new_relthrot)
-        # connection.watch(obd.commands.ACCELERATOR_POS_D, callback=new_accd)
-        # connection.watch(obd.commands.ACCELERATOR_POS_E, callback=new_acce)
-        # connection.watch(obd.commands.THROTTLE_ACTUATOR, callback=new_throtact)
-        # connection.watch(obd.commands.ENGINE_LOAD, callback=new_engine)
-        # connection.watch(obd.commands.BAROMETRIC_PRESSURE, callback=new_pressure)
-        # connection.watch(obd.commands.FUEL_STATUS, callback=new_fuel)
+        connection.watch(obd.commands.THROTTLE_POS, callback=new_throt)
+        connection.watch(obd.commands.RELATIVE_THROTTLE_POS, callback=new_relthrot)
+        connection.watch(obd.commands.ACCELERATOR_POS_D, callback=new_accd)
+        connection.watch(obd.commands.ACCELERATOR_POS_E, callback=new_acce)
+        connection.watch(obd.commands.THROTTLE_ACTUATOR, callback=new_throtact)
+        connection.watch(obd.commands.ENGINE_LOAD, callback=new_engine)
+        connection.watch(obd.commands.BAROMETRIC_PRESSURE, callback=new_pressure)
+        connection.watch(obd.commands.FUEL_STATUS, callback=new_fuel)
 
         connection.start()
 
