@@ -28,7 +28,7 @@ def new_speed(v):
     velocity.header.stamp = rospy.Time.now()
     velocity.header.frame_id = "vehicle"
     print "new_speed "+str(v)
-    velocity.twist.linear.x = float(str(v).split(':')[-1].split(' ')[0])
+    velocity.twist.linear.x = float(str(v).split(':')[-1].split(' ')[0])/3.6
     pubspeed.publish(velocity)
 def new_relthrot(v):
     value = v
